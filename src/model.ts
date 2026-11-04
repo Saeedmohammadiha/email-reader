@@ -1,10 +1,34 @@
-import { ChatOpenAI } from "@langchain/openai";
+import { ChatOpenAI, OpenAIClient } from "@langchain/openai";
+import { getRetryable } from "@langchain/core/errors";
 
-export const llm = new ChatOpenAI({
-  model: "claude-sonnet-4-6",
-  temperature: 0.7,
-  configuration: {
-    baseURL: "http://localhost:8000/v1",
-    apiKey: "your-api-key",
-  },
-});
+export function createModel(config: {
+  modelName: string;
+  modelKey: string;
+  modelUrl: string;
+}) {
+  return new ChatOpenAI({
+    model: config.modelName,
+    apiKey: config.modelKey,
+    configuration: { baseURL: config.modelUrl },
+    temperature: 0,
+    maxRetries: 0,
+  });
+}
+
+export function isRetryableModelError(error: unknown): boolean {
+  if (
+    error instanceof OpenAIClient.APIError &&
+    error.code === "insufficient_quota"
+  )
+    return false;
+  const retryable = getRetryable(error);
+  if (retryable !== undefined) return retryable;
+  if (error instanceof OpenAIClient.APIConnectionError) return true;
+  return (
+    error instanceof OpenAIClient.APIError &&
+    error.status !== undefined &&
+    (error.status === 408 ||
+      error.status === 429 ||
+      (error.status >= 500 && error.status < 600))
+  );
+}

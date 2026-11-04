@@ -7,5 +7,5 @@
 **Status:** ready-for-human
 
 - [x] Add focused automated checks and local setup instructions.
-- [ ] Supply the model configuration, prompt, templates, and knowledge.
+- [ ] Supply the model configuration, templates, and knowledge.
 - [ ] Manually verify all routes and inspect a saved failure.
