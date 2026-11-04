@@ -1,5 +1,6 @@
 import type { GraphNode } from "@langchain/langgraph";
-import type { EmailAgentState, WorkflowContext } from "../emailClassification.js";
+import type { EmailAgentState } from "../workflowState.js";
+import type { WorkflowContext } from "./classify.js";
 
 export const send: GraphNode<typeof EmailAgentState, WorkflowContext> = async (state, config) => {
   if (!state.responseText?.trim()) throw new Error("Generated response is empty");

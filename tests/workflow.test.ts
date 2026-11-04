@@ -6,7 +6,7 @@ import { workflow } from "../src/workflow.js";
 import { PASSWORD_TEMPLATE, MISSING_KNOWLEDGE_TEMPLATE } from "../src/branches/password.js";
 import { UNRELATED_TEMPLATE } from "../src/nodes/fallback.js";
 import { getModel } from "../src/model.js";
-import type { EmailClassificationType } from "../src/emailClassification.js";
+import type { EmailClassificationType } from "../src/nodes/classify.js";
 import {
   input, passwordClassification, unrelatedClassification, uncertainClassification,
   completion, mockModel, temporaryDirectory, recordingAdapter,

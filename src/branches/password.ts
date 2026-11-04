@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import type { GraphNode } from "@langchain/langgraph";
-import type { EmailAgentState } from "../emailClassification.js";
+import type { EmailAgentState } from "../workflowState.js";
 import { draftResponse } from "../nodes/draftResponse.js";
 
 export const PASSWORD_TEMPLATE = `

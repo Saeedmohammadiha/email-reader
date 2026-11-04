@@ -1,5 +1,5 @@
 import type { GraphNode } from "@langchain/langgraph";
-import type { EmailAgentState } from "../emailClassification.js";
+import type { EmailAgentState } from "../workflowState.js";
 import { draftResponse } from "./draftResponse.js";
 
 export const UNRELATED_TEMPLATE = `

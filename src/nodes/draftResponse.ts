@@ -1,6 +1,6 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import type { RunnableConfig } from "@langchain/core/runnables";
-import type { WorkflowState } from "../emailClassification.js";
+import type { WorkflowState } from "../workflowState.js";
 import { getModel } from "../model.js";
 
 export async function draftResponse(

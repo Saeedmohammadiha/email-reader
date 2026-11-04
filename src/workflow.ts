@@ -1,11 +1,11 @@
 import { END, START, StateGraph, NodeTimeoutError, type NodeError } from "@langchain/langgraph";
-import { EmailAgentState, WorkflowContextSchema, type WorkflowState } from "./emailClassification.js";
 import { isRetryableModelError } from "./model.js";
 import { saveFailure } from "./failures.js";
-import { classify, routeRequest } from "./nodes/classify.js";
+import { classify, routeRequest, WorkflowContextSchema } from "./nodes/classify.js";
 import { loadKnowledge, passwordResponse, missingKnowledge } from "./branches/password.js";
 import { unrelatedResponse, human } from "./nodes/fallback.js";
 import { send } from "./nodes/send.js";
+import { EmailAgentState, type WorkflowState } from "./workflowState.js";
 
 async function errorHandler(state: WorkflowState, { node, error }: NodeError): Promise<never> {
   try {

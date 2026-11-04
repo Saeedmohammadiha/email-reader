@@ -4,7 +4,7 @@ import {
   OpenAIClient,
 } from "@langchain/openai";
 import { getRetryable } from "@langchain/core/errors";
-import { config } from "./config.js";
+import { config } from "./infra/config.js";
 
 const model = new ChatOpenAI({
   model: config.MODEL_NAME,

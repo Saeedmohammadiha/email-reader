@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { readConfig } from "../src/config.js";
+import { readConfig } from "../src/infra/config.js";
 
 const env = {
   RESEND_API_KEY: "test",

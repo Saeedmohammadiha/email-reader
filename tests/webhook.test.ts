@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { createApi } from "../src/api.js";
+import { createApi } from "../src/infra/api.js";
 import { ResendAdapter } from "../src/adapters/resend.js";
 import { completion, mockFetch, temporaryDirectory, unrelatedClassification } from "./helpers.js";
 

@@ -1,7 +1,7 @@
 import Fastify from "fastify";
-import type { ChannelAdapter } from "./adapters/types.js";
-import { saveFailure } from "./failures.js";
-import { workflow } from "./workflow.js";
+import type { ChannelAdapter } from "../adapters/types.js";
+import { saveFailure } from "../failures.js";
+import { workflow } from "../workflow.js";
 
 export function createApi(adapter: ChannelAdapter) {
   const app = Fastify({ bodyLimit: 1024 * 1024 });

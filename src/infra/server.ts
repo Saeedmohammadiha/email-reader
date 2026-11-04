@@ -1,4 +1,4 @@
-import { ResendAdapter } from "./adapters/resend.js";
+import { ResendAdapter } from "../adapters/resend.js";
 import { createApi } from "./api.js";
 import { config } from "./config.js";
 
