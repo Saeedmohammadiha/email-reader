@@ -6,25 +6,31 @@ description: Implement or review this repository's LangGraph TypeScript workflow
 # LangGraph workflows
 
 Use the official JavaScript/TypeScript Graph API for workflow orchestration. Read
-the relevant sections of [the research notes](../../../docs/agents/langgraph-research.md)
-for sources and framework semantics. Check installed declarations when a documented
-API is unfamiliar; current online docs may differ from the installed version.
+the current implementation section of [the architecture](../../../APPLICATION_ARCHITECTURE.md)
+for repository structure and the [official Graph API guide](https://docs.langchain.com/oss/javascript/langgraph/graph-api)
+for framework semantics. Check installed declarations when a documented API is
+unfamiliar; current online docs may differ from the installed version.
 
 ## Repository conventions
 
 - Reuse `EmailAgentState` and `EmailClassificationSchema` from
   `src/emailClassification.ts`. Derive state and classification types from them.
   Extend the shared schema when a flow needs another persisted field.
-- Follow the active entry path: `src/index.ts` -> `src/localApp.ts` ->
-  `src/passwordWorkflow.ts`. Standalone prototype nodes are not evidence that a
-  feature is registered or runs; follow imports and graph registration.
+- Extend the single compiled graph in `src/workflow.ts`. Register node functions
+  imported from `src/nodes/` and `src/branches/`; the password flow is a branch of
+  that graph. Keep workflow construction direct rather than introducing factories
+  or an injected bundle of node implementations.
+- Channel adapters validate and normalize source events to `IncomingRequest` from
+  `src/adapters/types.ts`. The listener passes `{ request }` to `workflow.invoke`,
+  entering classification from `START`. Keep provider payloads in their adapter.
 - Each model node owns and builds its task-specific system prompt from the context
   it needs. Construct messages when invoking the model. This is a repository
   choice; LangGraph does not mandate a `SYSTEM_PROMPT` environment variable or a
   particular prompt-file layout.
-- Keep provider clients and credentials outside persisted state. Use existing
-  injected adapters or LangGraph runtime context for dependencies. Native graph
-  APIs own scheduling and recovery; adapters own external I/O.
+- Keep provider clients and credentials outside persisted state. The `send` node
+  uses the channel adapter in LangGraph runtime context. Model nodes use the shared
+  client from `getModel()` in `src/model.ts`. Native graph APIs own scheduling and
+  recovery; channel adapters own provider retrieval and delivery.
 
 ## State and nodes
 
@@ -72,7 +78,7 @@ API is unfamiliar; current online docs may differ from the installed version.
 
 ## Verify the requested behavior
 
-Exercise affected routes with injected model/provider fixtures and run the
+Exercise affected routes through the single graph with mocked provider HTTP and run the
 repository's relevant checks. Assert observable outcomes, failure state, and
 side-effect counts. When adding retries or interrupts, cover exhaustion or
 pause/resume behavior respectively. Identify local product choices separately

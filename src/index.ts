@@ -1,4 +1,4 @@
-import { startServer } from "./localApp.js";
+import { startServer } from "./server.js";
 
-// TODO: Handle startup/listener errors and shut down in-flight work gracefully.
-startServer();
+// TODO: Shut down in-flight work gracefully.
+await startServer();

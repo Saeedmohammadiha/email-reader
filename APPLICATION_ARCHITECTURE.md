@@ -5,6 +5,31 @@ Updated: 2026-11-02.
 
 This document describes the intended application independently of the experimental code. Interfaces describe the information and capabilities the workflow needs. Adapters implement those contracts and can be replaced without changing the workflow.
 
+### Current local implementation
+
+The application exports one compiled LangGraph from `src/workflow.ts`. The password
+guidance flow is its first implemented branch, with nodes and templates in
+`src/branches/password.ts`; additional branches will extend this same graph.
+Node functions live separately from the graph definition and are registered
+directly, without a workflow-composition factory.
+
+`src/config.ts` loads `.env` and validates required settings and the port before
+clients initialize. `src/server.ts` creates the Resend adapter and starts the
+Fastify listener. `src/api.ts` receives webhook requests and invokes the workflow;
+`src/index.ts` starts the server.
+
+The Resend adapter in `src/adapters/resend.ts` validates inbound events, retrieves
+the email, and maps it to `{ id, sender, subject, content }`. The HTTP listener
+passes that normalized request to `workflow.invoke({ request }, { context: {
+adapter } })`. Execution enters the classification node from `START`. Sending
+remains a graph node that calls the run's channel adapter; Resend-specific payloads
+and library calls stay in the adapter. A ticket adapter can later supply the same
+request shape and reply method once its actual contract is known.
+
+The broader identity, history, connection-state, RAG, and ticket-publication
+capabilities below remain planned work. The local milestone retains its existing
+password, unrelated-response, and console-only human-handling behavior.
+
 ## 1. Known scope
 
 | Area | Known information |

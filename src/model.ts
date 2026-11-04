@@ -1,18 +1,21 @@
-import { ChatOpenAI, OpenAIClient } from "@langchain/openai";
+import {
+  ChatOpenAI,
+  type ChatOpenAICallOptions,
+  OpenAIClient,
+} from "@langchain/openai";
 import { getRetryable } from "@langchain/core/errors";
+import { config } from "./config.js";
 
-export function createModel(config: {
-  modelName: string;
-  modelKey: string;
-  modelUrl: string;
-}) {
-  return new ChatOpenAI({
-    model: config.modelName,
-    apiKey: config.modelKey,
-    configuration: { baseURL: config.modelUrl },
-    temperature: 0,
-    maxRetries: 0,
-  });
+const model = new ChatOpenAI({
+  model: config.MODEL_NAME,
+  apiKey: config.MODEL_API_KEY,
+  configuration: { baseURL: config.MODEL_BASE_URL },
+  temperature: 0,
+  maxRetries: 0,
+});
+
+export function getModel(): ChatOpenAI<ChatOpenAICallOptions> {
+  return model;
 }
 
 export function isRetryableModelError(error: unknown): boolean {

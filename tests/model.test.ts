@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { OpenAIClient, wrapOpenAIClientError } from "@langchain/openai";
-import { createModel, isRetryableModelError } from "../src/model.js";
+import { getModel, isRetryableModelError } from "../src/model.js";
 
 test("retries transient provider errors but rejects permanent and validation errors", () => {
   for (const status of [408, 429, 500, 503]) {
@@ -28,7 +28,7 @@ test("the model client does not retry independently of LangGraph", async () => {
       calls++;
       return Response.json({ error: { message: "temporarily unavailable" } }, { status: 503 });
     };
-    const model = createModel({ modelName: "test", modelKey: "test", modelUrl: "http://localhost:1234/v1" });
+    const model = getModel();
     await assert.rejects(model.invoke("Test retry ownership"), { status: 503 });
     assert.equal(calls, 1);
   } finally {
